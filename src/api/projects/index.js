@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const builds = require("./builds");
+const { store } = require("../../projects");
 
 router.get("/", (req, res) => {
   // TODO retrieve and send all projects
-  res.status(418).json({ message: "Not Implemented" });
+  res.status(200).json(store.getState());
 });
 
 router.put("/", (req, res) => {
