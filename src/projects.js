@@ -13,6 +13,16 @@ const initialState = {
 // const EDIT_TODO = "EDIT_TODO";
 // const DELETE_TODO = "DELETE_TODO";
 
+const ADD_PROJECT = "ADD_PROJECT";
+
+const addProject = (id, project) => {
+  const newProject = { ...project };
+  newProject.id = id;
+  return {
+    type: ADD_PROJECT,
+    project: newProject,
+  };
+};
 // const addTodo = (todo) => ({
 //   type: ADD_TODO,
 //   todo,
@@ -39,6 +49,11 @@ const initialState = {
 
 const projectsReducer = (previousState = initialState, action) => {
   switch (action.type) {
+    case ADD_PROJECT: {
+      const newState = { ...previousState };
+      const newId = action.project.id;
+      newState.projects[newId] = action.project;
+    }
     // case ADD_TODO: {
     //   const newState = { ...previousState };
     //   newState.todos.push(action.todo);
@@ -71,4 +86,4 @@ const projectsReducer = (previousState = initialState, action) => {
 
 const store = redux.createStore(projectsReducer);
 
-module.exports = { store }; //, addTodo, setTodo, editTodo, deleteTodo };
+module.exports = { store, addProject };

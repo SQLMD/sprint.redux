@@ -1,16 +1,19 @@
 const router = require("express").Router();
 const builds = require("./builds");
-const { store } = require("../../projects");
+const { store, addProject } = require("../../projects");
+const shortid = require("shortid");
 
 router.get("/", (req, res) => {
-  // TODO retrieve and send all projects
   res.status(200).json(store.getState());
 });
 
+//TODO change to post
 router.put("/", (req, res) => {
   const { project } = req.body;
-  // TODO Add new project, give it an id and send it back.
-  res.status(418).json({ message: "Not Implemented" });
+  const newId = shortid.generate();
+  store.dispatch(addProject(newId, project));
+  const newProject = store.getState().projects[newId];
+  res.status(201).json(newProject);
 });
 
 router.get("/:projectId", (req, res) => {
