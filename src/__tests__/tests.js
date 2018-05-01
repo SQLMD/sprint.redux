@@ -9,6 +9,7 @@ describe("Projects", () => {
       url: "git@github.com:Microsoft/vscode.git",
       buildCommand: "yarn && yarn test",
       language: "JavaScript",
+      builds: [],
     };
     const newProjectId = "5";
     let previousState;
@@ -50,6 +51,21 @@ describe("Projects", () => {
         });
       });
     });
+    describe("DELETE_PROJECT", () => {
+      it("should remove a project with the given id", () => {
+        const action = projects.addProject(newProjectId, newProject);
+        projects.store.dispatch(action);
+        const oldState = projects.store.getState();
+        const oldNumProjects = Object.keys(oldState.projects).length;
+        projects.store.dispatch(projects.deleteProject(newProjectId));
+        const newState = projects.store.getState();
+        const newNumProjects = Object.keys(newState.projects).length;
+        expect(newNumProjects).to.equal(oldNumProjects - 1);
+        expect(newState.projects[newProjectId]).to.be.undefined;
+      });
+    });
+    describe("ADD_BUILD", () => {});
+    describe("EDIT_BUILD", () => {});
   });
   describe("reducers", () => {});
 });
