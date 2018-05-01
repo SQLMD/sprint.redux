@@ -14,6 +14,7 @@ const initialState = {
 // const DELETE_TODO = "DELETE_TODO";
 
 const ADD_PROJECT = "ADD_PROJECT";
+const INITIALIZE = "INITIALIZE";
 
 const addProject = (id, project) => {
   const newProject = { ...project };
@@ -22,6 +23,10 @@ const addProject = (id, project) => {
     type: ADD_PROJECT,
     project: newProject,
   };
+};
+
+const initialize = () => {
+  return { type: INITIALIZE };
 };
 // const addTodo = (todo) => ({
 //   type: ADD_TODO,
@@ -87,4 +92,4 @@ const projectsReducer = (previousState = initialState, action) => {
 
 const store = redux.createStore(projectsReducer);
 
-module.exports = { store, addProject };
+module.exports = { store, addProject, initialize };
