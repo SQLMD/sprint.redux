@@ -82,7 +82,35 @@ describe("Projects", () => {
         expect(newNumBuilds).to.equal(oldNumBuilds + 1);
       });
     });
-    describe("EDIT_BUILD", () => {});
+    describe("EDIT_BUILD", () => {
+      it("should modify the status of a build", () => {
+        // Add a project.
+        let action = projects.addProject(projectId, project);
+        projects.store.dispatch(action);
+        const oldState = projects.store.getState();
+        const oldProject = oldState.projects[projectId];
+        const oldNumBuilds = oldProject.builds.length;
+        // Add a build.
+        const build = {
+          buildNumber: oldNumBuilds,
+          status: "Running",
+        };
+        action = projects.addBuild(projectId, oldNumBuilds, build);
+        projects.store.dispatch(action);
+        const newProject = projects.store.getState().projects[projectId];
+        // Get the status of the build.
+        const oldStatus = newProject.builds[oldNumBuilds].status;
+        // Change the status of the build.
+        projects.store.dispatch(
+          projects.editBuild(projectId, oldNumBuilds, { status: "Success" })
+        );
+        // Verify that it has changed.
+        const newNewState = projects.store.getState();
+        const newNewProject = newNewState.projects[projectId];
+        const newStatus = newNewProject.builds[oldNumBuilds].status;
+        expect(newStatus).to.equal("Success");
+      });
+    });
   });
   describe("reducers", () => {});
 });
