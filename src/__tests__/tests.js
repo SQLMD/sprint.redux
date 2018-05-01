@@ -46,6 +46,7 @@ describe("Projects", () => {
         expect(currentState.projects[newProjectId]).to.deep.equal({
           ...newProject,
           ...changes,
+          id: newProjectId,
         });
       });
     });

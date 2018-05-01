@@ -13,8 +13,13 @@ const initialState = {
 // const EDIT_TODO = "EDIT_TODO";
 // const DELETE_TODO = "DELETE_TODO";
 
-const ADD_PROJECT = "ADD_PROJECT";
 const INITIALIZE = "INITIALIZE";
+const ADD_PROJECT = "ADD_PROJECT";
+const EDIT_PROJECT = "EDIT_PROJECT";
+
+const initialize = () => {
+  return { type: INITIALIZE };
+};
 
 const addProject = (id, project) => {
   const newProject = { ...project };
@@ -25,9 +30,12 @@ const addProject = (id, project) => {
   };
 };
 
-const initialize = () => {
-  return { type: INITIALIZE };
-};
+const editProject = (id, changes) => ({
+  type: EDIT_PROJECT,
+  id,
+  changes,
+});
+
 // const addTodo = (todo) => ({
 //   type: ADD_TODO,
 //   todo,
@@ -58,6 +66,17 @@ const projectsReducer = (previousState = initialState, action) => {
       const newState = { ...previousState };
       const newId = action.project.id;
       newState.projects[newId] = action.project;
+      return newState;
+    }
+    case EDIT_PROJECT: {
+      const newState = { ...previousState };
+      // Get the current project by id
+      const projectToChange = newState.projects[action.id];
+      // Change that object
+      const updatedProject = { ...projectToChange, ...action.changes };
+      // update the state with that object
+      newState.projects[action.id] = updatedProject;
+      // return the new state
       return newState;
     }
     // case ADD_TODO: {
@@ -92,4 +111,4 @@ const projectsReducer = (previousState = initialState, action) => {
 
 const store = redux.createStore(projectsReducer);
 
-module.exports = { store, addProject, initialize };
+module.exports = { store, initialize, addProject, editProject };
