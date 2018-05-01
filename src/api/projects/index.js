@@ -1,6 +1,11 @@
 const router = require("express").Router();
 const builds = require("./builds");
-const { store, addProject, editProject } = require("../../projects");
+const {
+  store,
+  addProject,
+  editProject,
+  deleteProject,
+} = require("../../projects");
 const shortid = require("shortid");
 
 const validateProject = (project) => {
@@ -34,7 +39,6 @@ router.get("/:projectId", (req, res) => {
 router.patch("/:projectId", (req, res) => {
   const { projectId } = req.params;
   const { changes } = req.body;
-  console.log(changes);
   try {
     validateProject(changes);
     store.dispatch(editProject(projectId, changes));
@@ -46,8 +50,8 @@ router.patch("/:projectId", (req, res) => {
 
 router.delete("/:projectId", (req, res) => {
   const { projectId } = req.params;
-  // TODO delete project, return status 200 with no body on success
-  res.status(418).json({ message: "Not Implemented" });
+  store.dispatch(deleteProject(projectId));
+  res.status(200).end();
 });
 
 router.use("/:projectId/builds", builds);

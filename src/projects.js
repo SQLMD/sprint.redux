@@ -12,6 +12,7 @@ const initialState = {
 const INITIALIZE = "INITIALIZE";
 const ADD_PROJECT = "ADD_PROJECT";
 const EDIT_PROJECT = "EDIT_PROJECT";
+const DELETE_PROJECT = "DELETE_PROJECT";
 
 const initialize = () => {
   return { type: INITIALIZE };
@@ -32,6 +33,11 @@ const editProject = (id, changes) => ({
   changes,
 });
 
+const deleteProject = (id) => ({
+  type: DELETE_PROJECT,
+  id,
+});
+
 const projectsReducer = (previousState = initialState, action) => {
   switch (action.type) {
     case ADD_PROJECT: {
@@ -48,6 +54,12 @@ const projectsReducer = (previousState = initialState, action) => {
       return newState;
     }
 
+    case DELETE_PROJECT: {
+      const newState = { ...previousState };
+      delete newState.projects[action.id];
+      return newState;
+    }
+
     default:
       return previousState;
   }
@@ -55,4 +67,4 @@ const projectsReducer = (previousState = initialState, action) => {
 
 const store = redux.createStore(projectsReducer);
 
-module.exports = { store, initialize, addProject, editProject };
+module.exports = { store, initialize, addProject, editProject, deleteProject };
