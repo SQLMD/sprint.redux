@@ -53,6 +53,7 @@ const projectsReducer = (previousState = initialState, action) => {
       const newState = { ...previousState };
       const newId = action.project.id;
       newState.projects[newId] = action.project;
+      return newState;
     }
     // case ADD_TODO: {
     //   const newState = { ...previousState };
