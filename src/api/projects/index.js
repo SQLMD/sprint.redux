@@ -18,8 +18,7 @@ router.put("/", (req, res) => {
 
 router.get("/:projectId", (req, res) => {
   const { projectId } = req.params;
-  // TODO retrieve and send project with given id
-  res.status(418).json({ message: "Not Implemented" });
+  res.status(200).json(store.getState().projects[projectId]);
 });
 
 router.patch("/:projectId", (req, res) => {
