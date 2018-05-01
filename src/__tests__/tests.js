@@ -2,24 +2,24 @@
 const { expect } = require("chai");
 const projects = require("../projects");
 
-describe("Projects", () => {
-  describe("actions", () => {
-    const project = {
-      name: "vscode",
-      url: "git@github.com:Microsoft/vscode.git",
-      buildCommand: "yarn && yarn test",
-      language: "JavaScript",
-      builds: [],
-    };
-    const projectId = "5";
-    let previousState;
+describe("Redux Actions", () => {
+  const project = {
+    name: "vscode",
+    url: "git@github.com:Microsoft/vscode.git",
+    buildCommand: "yarn && yarn test",
+    language: "JavaScript",
+    builds: [],
+  };
+  const projectId = "5";
+  let previousState;
 
-    beforeEach(() => {
-      const action = projects.initialize();
-      projects.store.dispatch(action);
-      previousState = projects.store.getState();
-    });
+  beforeEach(() => {
+    const action = projects.initialize();
+    projects.store.dispatch(action);
+    previousState = projects.store.getState();
+  });
 
+  describe("Projects", () => {
     describe("ADD_PROJECT", () => {
       it("should add a project to the state's projects", () => {
         const previousNumProjects = Object.keys(previousState.projects).length;
@@ -64,6 +64,8 @@ describe("Projects", () => {
         expect(newState.projects[projectId]).to.be.undefined;
       });
     });
+  });
+  describe("Builds", () => {
     describe("ADD_BUILD", () => {
       it("should add a build to a project", () => {
         let action = projects.addProject(projectId, project);
@@ -84,27 +86,20 @@ describe("Projects", () => {
     });
     describe("EDIT_BUILD", () => {
       it("should modify the status of a build", () => {
-        // Add a project.
         let action = projects.addProject(projectId, project);
         projects.store.dispatch(action);
         const oldState = projects.store.getState();
         const oldProject = oldState.projects[projectId];
         const oldNumBuilds = oldProject.builds.length;
-        // Add a build.
         const build = {
           buildNumber: oldNumBuilds,
           status: "Running",
         };
         action = projects.addBuild(projectId, oldNumBuilds, build);
         projects.store.dispatch(action);
-        const newProject = projects.store.getState().projects[projectId];
-        // Get the status of the build.
-        const oldStatus = newProject.builds[oldNumBuilds].status;
-        // Change the status of the build.
         projects.store.dispatch(
           projects.editBuild(projectId, oldNumBuilds, { status: "Success" })
         );
-        // Verify that it has changed.
         const newNewState = projects.store.getState();
         const newNewProject = newNewState.projects[projectId];
         const newStatus = newNewProject.builds[oldNumBuilds].status;
@@ -112,5 +107,4 @@ describe("Projects", () => {
       });
     });
   });
-  describe("reducers", () => {});
 });
