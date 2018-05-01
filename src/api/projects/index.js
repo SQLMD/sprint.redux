@@ -1,7 +1,17 @@
 const router = require("express").Router();
 const builds = require("./builds");
-const { store, addProject } = require("../../projects");
+const { store, addProject, editProject } = require("../../projects");
 const shortid = require("shortid");
+
+const validateProject = (project) => {
+  const validKeys = new Set(["name", "url", "buildCommand", "language", "id"]);
+  // eslint-disable-next-line prefer-const
+  for (let key in project) {
+    if (!validKeys.has(key)) {
+      throw new Error(`${key} is not valid`);
+    }
+  }
+};
 
 router.get("/", (req, res) => {
   res.status(200).json(store.getState());
@@ -23,9 +33,15 @@ router.get("/:projectId", (req, res) => {
 
 router.patch("/:projectId", (req, res) => {
   const { projectId } = req.params;
-  const { project } = req.body;
-  // TODO edit a projects information. Make sure to validate whats being sent!
-  res.status(418).json({ message: "Not Implemented" });
+  const { changes } = req.body;
+  console.log(changes);
+  try {
+    validateProject(changes);
+    store.dispatch(editProject(projectId, changes));
+    res.status(200).json(store.getState().projects[projectId]);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.delete("/:projectId", (req, res) => {
