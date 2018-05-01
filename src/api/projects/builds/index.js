@@ -21,8 +21,8 @@ router.get("/latest", (req, res) => {
 
 router.get("/:buildId", (req, res) => {
   const { projectId, buildId } = req.params;
-  // TODO Retrieve a single build from a project
-  res.status(418).json({ message: "Not Implemented" });
+  const builds = store.getState().projects[projectId].builds;
+  res.status(200).json(builds[buildId]);
 });
 
 module.exports = router;
