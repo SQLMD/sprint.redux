@@ -33,19 +33,22 @@ describe("Projects", () => {
         });
       });
     });
-    // describe("EDIT_PROJECT", () => {
-    //   it("should edit a project with changes", () => {
-    //     const action = projects.addProject(newProjectId, newProject);
-    //     projects.store.dispatch(action);
-    //     const currentState = projects.store.getState();
-    //     const currentNumProjects = Object.keys(currentState.projects).length;
-    //     expect(currentNumProjects).to.equal(previousNumProjects + 1);
-    //     expect(currentState.projects[newProjectId]).to.deep.equal({
-    //       ...newProject,
-    //       id: newProjectId,
-    //     });
-    //   });
-    // });
+    describe("EDIT_PROJECT", () => {
+      it("should edit a project with changes", () => {
+        let action = projects.addProject(newProjectId, newProject);
+        projects.store.dispatch(action);
+        const changes = {
+          name: "vim",
+        };
+        action = projects.editProject(newProjectId, changes);
+        projects.store.dispatch(action);
+        const currentState = projects.store.getState();
+        expect(currentState.projects[newProjectId]).to.deep.equal({
+          ...newProject,
+          ...changes,
+        });
+      });
+    });
   });
   describe("reducers", () => {});
 });
