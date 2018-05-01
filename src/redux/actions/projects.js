@@ -3,8 +3,6 @@ const {
   ADD_PROJECT,
   EDIT_PROJECT,
   DELETE_PROJECT,
-  ADD_BUILD,
-  EDIT_BUILD,
 } = require("../constants");
 
 const initialize = () => {
@@ -31,25 +29,9 @@ const deleteProject = (id) => ({
   id,
 });
 
-const addBuild = (projectId, buildId, build) => ({
-  type: ADD_BUILD,
-  projectId,
-  buildId,
-  build,
-});
-
-const editBuild = (projectId, buildId, changes) => ({
-  type: EDIT_BUILD,
-  projectId,
-  buildId,
-  changes,
-});
-
 module.exports = {
   initialize,
   addProject,
   editProject,
   deleteProject,
-  addBuild,
-  editBuild,
 };

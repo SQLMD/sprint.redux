@@ -1,7 +1,8 @@
 //const chai = require("chai");
 const { expect } = require("chai");
 const reducers = require("../redux/reducers/projects");
-const actions = require("../redux/actions/projects");
+const projectActions = require("../redux/actions/projects");
+const buildActions = require("../redux/actions/builds");
 
 describe("Redux Actions", () => {
   const project = {
@@ -15,7 +16,7 @@ describe("Redux Actions", () => {
   let previousState;
 
   beforeEach(() => {
-    const action = actions.initialize();
+    const action = projectActions.initialize();
     reducers.store.dispatch(action);
     previousState = reducers.store.getState();
   });
@@ -24,7 +25,7 @@ describe("Redux Actions", () => {
     describe("ADD_PROJECT", () => {
       it("should add a project to the state's projects", () => {
         const previousNumProjects = Object.keys(previousState.projects).length;
-        const action = actions.addProject(projectId, project);
+        const action = projectActions.addProject(projectId, project);
         reducers.store.dispatch(action);
         const currentState = reducers.store.getState();
         const currentNumProjects = Object.keys(currentState.projects).length;
@@ -37,12 +38,12 @@ describe("Redux Actions", () => {
     });
     describe("EDIT_PROJECT", () => {
       it("should edit a project with changes", () => {
-        let action = actions.addProject(projectId, project);
+        let action = projectActions.addProject(projectId, project);
         reducers.store.dispatch(action);
         const changes = {
           name: "vim",
         };
-        action = actions.editProject(projectId, changes);
+        action = projectActions.editProject(projectId, changes);
         reducers.store.dispatch(action);
         const currentState = reducers.store.getState();
         expect(currentState.projects[projectId]).to.deep.equal({
@@ -54,11 +55,11 @@ describe("Redux Actions", () => {
     });
     describe("DELETE_PROJECT", () => {
       it("should remove a project with the given id", () => {
-        const action = actions.addProject(projectId, project);
+        const action = projectActions.addProject(projectId, project);
         reducers.store.dispatch(action);
         const oldState = reducers.store.getState();
         const oldNumProjects = Object.keys(oldState.projects).length;
-        reducers.store.dispatch(actions.deleteProject(projectId));
+        reducers.store.dispatch(projectActions.deleteProject(projectId));
         const newState = reducers.store.getState();
         const newNumProjects = Object.keys(newState.projects).length;
         expect(newNumProjects).to.equal(oldNumProjects - 1);
@@ -69,7 +70,7 @@ describe("Redux Actions", () => {
   describe("Builds", () => {
     describe("ADD_BUILD", () => {
       it("should add a build to a project", () => {
-        let action = actions.addProject(projectId, project);
+        let action = projectActions.addProject(projectId, project);
         reducers.store.dispatch(action);
         const oldState = reducers.store.getState();
         const oldProject = oldState.projects[projectId];
@@ -78,7 +79,7 @@ describe("Redux Actions", () => {
           buildNumber: oldNumBuilds,
           status: "Running",
         };
-        action = actions.addBuild(projectId, oldNumBuilds, build);
+        action = buildActions.addBuild(projectId, oldNumBuilds, build);
         reducers.store.dispatch(action);
         const newProject = reducers.store.getState().projects[projectId];
         const newNumBuilds = newProject.builds.length;
@@ -87,7 +88,7 @@ describe("Redux Actions", () => {
     });
     describe("EDIT_BUILD", () => {
       it("should modify the status of a build", () => {
-        let action = actions.addProject(projectId, project);
+        let action = projectActions.addProject(projectId, project);
         reducers.store.dispatch(action);
         const oldState = reducers.store.getState();
         const oldProject = oldState.projects[projectId];
@@ -96,10 +97,12 @@ describe("Redux Actions", () => {
           buildNumber: oldNumBuilds,
           status: "Running",
         };
-        action = actions.addBuild(projectId, oldNumBuilds, build);
+        action = buildActions.addBuild(projectId, oldNumBuilds, build);
         reducers.store.dispatch(action);
         reducers.store.dispatch(
-          actions.editBuild(projectId, oldNumBuilds, { status: "Success" })
+          buildActions.editBuild(projectId, oldNumBuilds, {
+            status: "Success",
+          })
         );
         const newNewState = reducers.store.getState();
         const newNewProject = newNewState.projects[projectId];

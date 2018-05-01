@@ -12,9 +12,8 @@ const {
   addProject,
   editProject,
   deleteProject,
-  addBuild,
-  editBuild,
 } = require("../actions/projects");
+const { addBuild, editBuild } = require("../actions/builds");
 
 const initialState = {
   projects: {},
