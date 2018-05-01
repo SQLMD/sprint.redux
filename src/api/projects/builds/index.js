@@ -1,5 +1,6 @@
 const router = require("express").Router({ mergeParams: true });
 const { store } = require("../../../projects");
+const { triggerBuild } = require("../../../util/build");
 
 router.get("/", (req, res) => {
   const { projectId } = req.params;
@@ -10,7 +11,8 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   const { projectId } = req.params;
   // TODO Trigger a new build for a project. Return immediately with status 200 (don't wait for build to finish).
-  res.status(418).json({ message: "Not Implemented" });
+  triggerBuild(projectId);
+  res.status(200).end();
 });
 
 router.get("/latest", (req, res) => {

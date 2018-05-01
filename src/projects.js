@@ -13,6 +13,8 @@ const INITIALIZE = "INITIALIZE";
 const ADD_PROJECT = "ADD_PROJECT";
 const EDIT_PROJECT = "EDIT_PROJECT";
 const DELETE_PROJECT = "DELETE_PROJECT";
+const ADD_BUILD = "ADD_BUILD";
+const EDIT_BUILD = "EDIT_BUILD";
 
 const initialize = () => {
   return { type: INITIALIZE };
@@ -38,6 +40,20 @@ const deleteProject = (id) => ({
   id,
 });
 
+const addBuild = (projectId, buildId, build) => ({
+  type: ADD_BUILD,
+  projectId,
+  buildId,
+  build,
+});
+
+const editBuild = (projectId, buildId, changes) => ({
+  type: EDIT_BUILD,
+  projectId,
+  buildId,
+  changes,
+});
+
 const projectsReducer = (previousState = initialState, action) => {
   switch (action.type) {
     case ADD_PROJECT: {
@@ -60,6 +76,26 @@ const projectsReducer = (previousState = initialState, action) => {
       return newState;
     }
 
+    case ADD_BUILD: {
+      const newState = { ...previousState };
+      const project = newState.projects[action.projectId];
+      const newBuild = { ...action.build, buildNumber: action.buildId };
+      project.builds.push(newBuild);
+      return newState;
+    }
+
+    case EDIT_BUILD: {
+      const newState = { ...previousState };
+      const project = newState.projects[action.projectId];
+      const editedBuild = {
+        ...project.builds[action.buildId],
+        ...action.changes,
+      };
+      project.builds[action.buildId] = editedBuild;
+
+      return newState;
+    }
+
     default:
       return previousState;
   }
@@ -67,4 +103,12 @@ const projectsReducer = (previousState = initialState, action) => {
 
 const store = redux.createStore(projectsReducer);
 
-module.exports = { store, initialize, addProject, editProject, deleteProject };
+module.exports = {
+  store,
+  initialize,
+  addProject,
+  editProject,
+  deleteProject,
+  addBuild,
+  editBuild,
+};
