@@ -64,7 +64,24 @@ describe("Projects", () => {
         expect(newState.projects[newProjectId]).to.be.undefined;
       });
     });
-    describe("ADD_BUILD", () => {});
+    describe("ADD_BUILD", () => {
+      it("should add a build to a project", () => {
+        let action = projects.addProject(newProjectId, newProject);
+        projects.store.dispatch(action);
+        const oldState = projects.store.getState();
+        const oldProject = oldState.projects[newProjectId];
+        const oldNumBuilds = oldProject.builds.length;
+        const build = {
+          buildNumber: oldNumBuilds,
+          status: "Running",
+        };
+        action = projects.addBuild(newProjectId, oldNumBuilds, build);
+        projects.store.dispatch(action);
+        const currentProject = projects.store.getState().projects[newProjectId];
+        const newNumBuilds = currentProject.builds.length;
+        expect(newNumBuilds).to.equal(oldNumBuilds + 1);
+      });
+    });
     describe("EDIT_BUILD", () => {});
   });
   describe("reducers", () => {});
