@@ -1,5 +1,5 @@
 const express = require("express");
-const projects = require("./projects");
+const projects = require("../redux/reducers/projects");
 
 const routes = express.Router();
 

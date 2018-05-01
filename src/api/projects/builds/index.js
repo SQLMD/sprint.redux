@@ -10,7 +10,6 @@ router.get("/", (req, res) => {
 
 router.post("/", (req, res) => {
   const { projectId } = req.params;
-  // TODO Trigger a new build for a project. Return immediately with status 200 (don't wait for build to finish).
   triggerBuild(projectId);
   res.status(200).end();
 });

@@ -1,20 +1,16 @@
 const redux = require("redux");
+const {
+  INITIALIZE,
+  ADD_PROJECT,
+  EDIT_PROJECT,
+  DELETE_PROJECT,
+  ADD_BUILD,
+  EDIT_BUILD,
+} = require("../constants");
 
-// Step 1: Design the shape of our state.
 const initialState = {
   projects: {},
 };
-
-// Step 2: Design the Actions/ActionCreators.
-// Step 2.1: Store your type constants!
-// Replace the whole state.
-
-const INITIALIZE = "INITIALIZE";
-const ADD_PROJECT = "ADD_PROJECT";
-const EDIT_PROJECT = "EDIT_PROJECT";
-const DELETE_PROJECT = "DELETE_PROJECT";
-const ADD_BUILD = "ADD_BUILD";
-const EDIT_BUILD = "EDIT_BUILD";
 
 const initialize = () => {
   return { type: INITIALIZE };

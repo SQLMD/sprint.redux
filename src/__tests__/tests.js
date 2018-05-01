@@ -1,6 +1,6 @@
 //const chai = require("chai");
 const { expect } = require("chai");
-const projects = require("../projects");
+const projects = require("../redux/reducers/projects");
 
 describe("Redux Actions", () => {
   const project = {
