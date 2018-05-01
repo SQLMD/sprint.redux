@@ -43,7 +43,7 @@ const projectsReducer = (previousState = initialState, action) => {
     case ADD_PROJECT: {
       const newState = { ...previousState };
       const newId = action.project.id;
-      newState.projects[newId] = action.project;
+      newState.projects[newId] = { ...action.project, builds: [] };
       return newState;
     }
     case EDIT_PROJECT: {
