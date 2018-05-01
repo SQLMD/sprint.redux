@@ -68,7 +68,7 @@ const insertProjects = async () =>
 
 const testInsert = async () => {
   console.info("GET /api/projects");
-  expect(await getJson(projEndPoint)).to.eql({ projects: [] });
+  expect(await getJson(projEndPoint)).to.eql({ projects: {} });
   console.info("PUT /api/projects");
   insertedProjects = await Promise.all(insertProjects());
   const expected = { projects: [...initialProjects] };
