@@ -1,9 +1,10 @@
 const router = require("express").Router({ mergeParams: true });
+const { store } = require("../../../projects");
 
 router.get("/", (req, res) => {
   const { projectId } = req.params;
-  // TODO Get and return all builds of given project
-  res.status(418).json({ message: "Not Implemented" });
+  const builds = store.getState().projects[projectId].builds;
+  res.status(200).json(builds);
 });
 
 router.post("/", (req, res) => {
@@ -14,8 +15,8 @@ router.post("/", (req, res) => {
 
 router.get("/latest", (req, res) => {
   const { projectId } = req.params;
-  // TODO Retrieve the latest build of a project
-  res.status(418).json({ message: "Not Implemented" });
+  const builds = store.getState().projects[projectId].builds;
+  res.status(200).json(builds.pop());
 });
 
 router.get("/:buildId", (req, res) => {
